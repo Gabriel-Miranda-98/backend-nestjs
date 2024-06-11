@@ -1,0 +1,16 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Gabriel-Miranda-98/backend-nestjs.git",
+  "author": "Gabriel Miranda <gabrielmiranda282@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "husky": "^9.0.11"
+  },
+  "scripts": {
+    "prepare": "husky"
+  }
+}
