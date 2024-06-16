@@ -1,13 +1,14 @@
+import { Uuid } from "../../core/domain/uuid.vo"
 import { Category } from "../category.entity"
 
 describe('Category Entity Unit Tests', () => {
-  it('Create a category', () => {
+  it('Criar um categoria', () => {
     let category= Category.create({
       name: 'Category 1',
      })
 
      expect(category).toBeInstanceOf(Category)
-     expect(category.categoryId).toBeUndefined()
+     expect(category.categoryId).toBeInstanceOf(Uuid)
      expect(category.name).toBe('Category 1')
      expect(category.description).toBeNull()
      expect(category.isActive).toBe(true)
@@ -20,7 +21,7 @@ describe('Category Entity Unit Tests', () => {
      })
 
      expect(category).toBeInstanceOf(Category)
-     expect(category.categoryId).toBeUndefined()
+     expect(category.categoryId).toBeInstanceOf(Uuid)
      expect(category.name).toBe('Category 2')
      expect(category.description).toBe('Category description')
      expect(category.isActive).toBe(false)
@@ -28,8 +29,10 @@ describe('Category Entity Unit Tests', () => {
   })
 
   it('Restore a category', () => {
-    let category= Category.restore({
-      categoryId: '1',
+
+    const categoryId= Uuid.create()
+    let category= Category.restore({    
+      categoryId,
       name: 'Category 1',
       description: 'Category description',
       isActive: false,
@@ -37,7 +40,7 @@ describe('Category Entity Unit Tests', () => {
     })
 
     expect(category).toBeInstanceOf(Category)
-    expect(category.categoryId).toBe('1')
+    expect(category.categoryId).toBe(categoryId)
     expect(category.name).toBe('Category 1')
     expect(category.description).toBe('Category description')
     expect(category.isActive).toBe(false)
@@ -45,8 +48,9 @@ describe('Category Entity Unit Tests', () => {
   })
 
   it('Change name of category', () => {
+    const categoryId= Uuid.create()
     const  category= Category.restore({
-      categoryId: '1',
+      categoryId,
       name: 'Category 1',
       description: 'Category description',
       isActive: false,
@@ -59,8 +63,10 @@ describe('Category Entity Unit Tests', () => {
   })
 
   it('Change description of category', () => {
+    const categoryId= Uuid.create()
+
     const  category= Category.restore({
-      categoryId: '1',
+      categoryId,
       name: 'Category 1',
       description: 'Category description',
       isActive: false,
@@ -74,8 +80,9 @@ describe('Category Entity Unit Tests', () => {
 
 
   it('Activate a category', () => {
+    const categoryId= Uuid.create()
     const  category= Category.restore({
-      categoryId: '1',
+      categoryId,
       name: 'Category 1',
       description: 'Category description',
       isActive: false,
@@ -88,8 +95,9 @@ describe('Category Entity Unit Tests', () => {
   })
 
   it('Deactivate a category', () => {
+    const categoryId= Uuid.create()
     const  category= Category.restore({
-      categoryId: '1',
+      categoryId,
       name: 'Category 1',
       description: 'Category description',
       isActive: true,
@@ -103,8 +111,9 @@ describe('Category Entity Unit Tests', () => {
 
 
   it('Convert category to JSON', () => {
+    const categoryId= Uuid.create()
     const  category= Category.restore({
-      categoryId: '1',
+      categoryId,
       name: 'Category 1',
       description: 'Category description',
       isActive: true,
@@ -113,7 +122,7 @@ describe('Category Entity Unit Tests', () => {
 
     const json= category.toJSON()
 
-    expect(json.categoryId).toBe('1')
+    expect(json.categoryId).toBe(categoryId.id)
     expect(json.name).toBe('Category 1')
     expect(json.description).toBe('Category description')
     expect(json.isActive).toBe(true)

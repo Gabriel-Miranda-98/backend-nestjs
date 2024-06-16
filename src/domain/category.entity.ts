@@ -1,5 +1,7 @@
+import { Uuid } from "../core/domain/uuid.vo";
+
 export interface CategoryConstructorProps{
-  categoryId?: string;
+  categoryId?: Uuid;
   name: string;
   description?: string|null;
   isActive?: boolean;
@@ -10,14 +12,14 @@ export interface CategoryConstructorProps{
 export interface CategoryCreateCommand extends Omit<CategoryConstructorProps, 'categoryId'| 'createdAt'>{}
 
 export class Category{
-  categoryId: string ;
+  categoryId: Uuid ;
   name: string;
   description: string|null;
   isActive: boolean;
   createdAt: Date;
 
   private constructor(props:CategoryConstructorProps){
-    this.categoryId=props.categoryId;
+    this.categoryId=props.categoryId|| Uuid.create();
     this.name=props.name;
     this.description=props.description??null;
     this.isActive=props.isActive?? true;
@@ -49,7 +51,7 @@ export class Category{
 
   toJSON(){
     return {
-      categoryId:this.categoryId,
+      categoryId:this.categoryId.id,
       name:this.name,
       description:this.description,
       isActive:this.isActive,
