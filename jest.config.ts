@@ -14,6 +14,8 @@ transform: {
   '^.+\\.(t|j)sx?$': '@swc/jest',
 },
 rootDir: './src',
+testEnvironment: 'node',
+
 
 };
 

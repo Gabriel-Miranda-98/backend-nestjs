@@ -2,6 +2,11 @@ import { Uuid } from "../../core/domain/uuid.vo"
 import { Category } from "../category.entity"
 
 describe('Category Entity Unit Tests', () => {
+  let validateSpy: jest.SpyInstance
+  beforeEach(() => {
+    validateSpy = jest.spyOn(Category, 'validate')
+  })
+
   it('Criar um categoria', () => {
     let category= Category.create({
       name: 'Category 1',
@@ -26,6 +31,7 @@ describe('Category Entity Unit Tests', () => {
      expect(category.description).toBe('Category description')
      expect(category.isActive).toBe(false)
      expect(category.createdAt).toBeInstanceOf(Date)
+     expect(validateSpy).toHaveBeenCalledTimes(2)
   })
 
   it('Restore a category', () => {
@@ -45,6 +51,7 @@ describe('Category Entity Unit Tests', () => {
     expect(category.description).toBe('Category description')
     expect(category.isActive).toBe(false)
     expect(category.createdAt).toBeInstanceOf(Date)
+
   })
 
   it('Change name of category', () => {
@@ -60,6 +67,8 @@ describe('Category Entity Unit Tests', () => {
     category.changeName('Category 2')
 
     expect(category.name).toBe('Category 2')
+    expect(validateSpy).toHaveBeenCalledTimes(1)
+
   })
 
   it('Change description of category', () => {
@@ -70,12 +79,15 @@ describe('Category Entity Unit Tests', () => {
       name: 'Category 1',
       description: 'Category description',
       isActive: false,
+      
     })
     expect(category.description).toBe('Category description')
 
     category.changeDescription('Category description 2')
 
     expect(category.description).toBe('Category description 2')
+    expect(validateSpy).toHaveBeenCalledTimes(1)
+
   })
 
 
