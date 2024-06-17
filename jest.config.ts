@@ -6,6 +6,7 @@
 import type {Config} from 'jest';
 
 const config: Config = {
+
 clearMocks: true,
 collectCoverage: true,
 coverageDirectory: "coverage",
@@ -15,6 +16,7 @@ transform: {
 },
 rootDir: './src',
 testEnvironment: 'node',
+setupFilesAfterEnv: ['./testing/except-helpers.ts'],
 
 
 };

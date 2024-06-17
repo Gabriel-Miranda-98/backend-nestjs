@@ -1,4 +1,5 @@
 import { Uuid } from "../core/domain/uuid.vo";
+import { EntityValidationError } from "../core/errors/entity-validation-error";
 import { CategoryValidatorFactory } from "./validators/category.validator";
 
 export interface CategoryConstructorProps{
@@ -58,7 +59,10 @@ export class Category{
 
   static validate(entity:Category){
     const validator = CategoryValidatorFactory.create()
-    return validator.validate(entity)
+    const isValid= validator.validate(entity)
+    if(!isValid){
+      throw new EntityValidationError(validator.erros,'Invalid category')
+    }
   }
 
 

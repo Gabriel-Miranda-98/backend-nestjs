@@ -1,4 +1,5 @@
 import { Uuid } from "../../core/domain/uuid.vo"
+import { EntityValidationError } from "../../core/errors/entity-validation-error"
 import { Category } from "../category.entity"
 
 describe('Category Entity Unit Tests', () => {
@@ -6,6 +7,70 @@ describe('Category Entity Unit Tests', () => {
   beforeEach(() => {
     validateSpy = jest.spyOn(Category, 'validate')
   })
+
+  describe('Error cases', () => {
+    it('Deve retornar um erro caso o nome seja inválido', () => {
+      expect((() => Category.create({ name: null }))).containsErrorMessages({
+        name: ['name should not be empty' ,"name must be a string" ,"name must be shorter than or equal to 255 characters"],
+      })
+
+      expect((() => Category.create({ name: '' }))).containsErrorMessages({
+        name: ['name should not be empty' ],
+      })
+
+      expect((() => Category.create({ name: 'a'.repeat(256) }))).containsErrorMessages({
+        name: ['name must be shorter than or equal to 255 characters' ],
+      })
+
+      expect((() => Category.create({ name: 5 as any }))).containsErrorMessages({
+        name: ["name must be a string",'name must be shorter than or equal to 255 characters' ],
+      })
+      
+    })
+
+    it('Deve retornar um erro caso a descrição seja inválida', () => {
+      expect((() => Category.create({ name: 'Category 1', description: 5 as any }))).containsErrorMessages({
+        description: ["description must be a string"],
+      })
+    })
+
+    it('Deve retornar um erro caso isActive seja inválido', () => {
+      expect((() => Category.create({ name: 'Category 1', isActive: null }))).containsErrorMessages({
+        isActive: ['isActive should not be empty' ,"isActive must be a boolean value"],
+      })
+
+      expect((() => Category.create({ name: 'Category 1', isActive: 5 as any }))).containsErrorMessages({
+        isActive: ["isActive must be a boolean value"],
+      })
+    })
+
+    it("Deve retornar um erro no changeName caso o nome seja inválido", () => {
+      expect((() => Category.restore({ name: 'Category 1' }).changeName(null))).containsErrorMessages({
+        name: ['name should not be empty' ,"name must be a string" ,"name must be shorter than or equal to 255 characters"],
+      
+      })
+    })
+
+    it("Deve retornar um erro no changeDescription caso a descrição seja inválida", () => {
+      expect((() => Category.restore({ name: 'Category 1' }).changeDescription(5 as any))).containsErrorMessages({
+        description: ["description must be a string"],
+      })
+    })
+
+    it("Deve retornar um erro no activate caso isActive seja inválido", () => {
+      expect((() => Category.restore({ name: 'Category 1' }).activate())).containsErrorMessages({
+        isActive: ['isActive must be a boolean value'],
+      })
+    })
+
+    it("Deve retornar um erro no deactivate caso isActive seja inválido", () => {
+      expect((() => Category.restore({ name: 'Category 1' }).deactivate())).containsErrorMessages({
+        isActive: ['isActive must be a boolean value'],
+      })
+    })
+  })
+
+  describe("Success cases", () => {
 
   it('Criar um categoria', () => {
     let category= Category.create({
@@ -140,4 +205,6 @@ describe('Category Entity Unit Tests', () => {
     expect(json.isActive).toBe(true)
     expect(json.createdAt).toBeInstanceOf(Date)
   })
+
+})
 })

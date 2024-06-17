@@ -1,4 +1,4 @@
-import { IsBoolean, isNotEmpty, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator"
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator"
 import { Category } from "../category.entity"
 import { ClassValidatorFields } from "../../core/validators/class-validator-fields"
 
