@@ -1,4 +1,6 @@
+import { Entity } from "../core/domain/entity";
 import { Uuid } from "../core/domain/uuid.vo";
+import { ValueObject } from "../core/domain/value-object";
 import { EntityValidationError } from "../core/errors/entity-validation-error";
 import { CategoryValidatorFactory } from "./validators/category.validator";
 
@@ -13,7 +15,8 @@ export interface CategoryConstructorProps{
 
 export interface CategoryCreateCommand extends Omit<CategoryConstructorProps, 'categoryId'| 'createdAt'>{}
 
-export class Category{
+export class Category extends Entity{
+  
   categoryId: Uuid ;
   name: string;
   description: string|null;
@@ -21,11 +24,16 @@ export class Category{
   createdAt: Date;
 
   private constructor(props:CategoryConstructorProps){
+    super()
     this.categoryId=props.categoryId|| Uuid.create();
     this.name=props.name;
     this.description=props.description??null;
     this.isActive=props.isActive?? true;
     this.createdAt=props.createdAt?? new Date();
+  }
+
+  getEntityId(): ValueObject {
+    return this.categoryId
   }
 
   static create(props:CategoryCreateCommand):Category{
